@@ -1,93 +1,125 @@
-Movie Picture Pipeline
+# Movie Picture Pipeline
+
 You've been brought on as the DevOps resource for a development team that manages a web application that is a catalog of Movie Picture movies. They're in dire need of automating their development workflows in hopes of accelerating their release cycle. They'd like to use Github Actions to automate testing, building and deploying their applications to an existing Kubernetes cluster.
 
 The team's project is comprised of 2 application.
 
-A frontend UI built written in Typescript, using the React framework
-A backend API written in Python using the Flask framework.
-In the starter folder, you'll find 2 folders, one named frontend and one named backend, where each application's source code is maintained. Your job is to use the team's existing documentation and create CI/CD pipelines to meet the teams' needs.
+1. A frontend UI built written in Typescript, using the React framework
+2. A backend API written in Python using the Flask framework.
 
-Deliverables
-Frontend
-A Continuous Integration workflow that:
-Runs on pull_requests against the main branch,only when code in the frontend application changes.
-Is able to be run on-demand (i.e. manually without needing to push code)
-Runs the following jobs in parallel:
-Runs a linting job that fails if the code doesn't adhere to eslint rules
-Runs a test job that fails if the test suite doesn't pass
-Runs a build job only if the lint and test jobs pass and successfully builds the application
-A Continuous Deployment workflow that:
-Runs on push against the main branch, only when code in the frontend application changes.
-Is able to be run on-demand (i.e. manually without needing to push code)
-Runs the same lint/test jobs as the Continuous Integration workflow
-Runs a build job only when the lint and test jobs pass
-The built docker image should be tagged with the git sha
-Runs a deploy job that applies the Kubernetes manifests to the provided cluster.
-The manifest should deploy the newly created tagged image
-The tag applied to the image should be the git SHA of the commit that triggered the build
-Backend
-A Continuous Integration workflow that:
-Runs on pull_requests against the main branch,only when code in the frontend application changes.
-Is able to be run on-demand (i.e. manually without needing to push code)
-Runs the following jobs in parallel:
-Runs a linting job that fails if the code doesn't adhere to eslint rules
-Runs a test job that fails if the test suite doesn't pass
-Runs a build job only if the lint and test jobs pass and successfully builds the application
-A Continuous Deployment workflow that:
-Runs on push against the main branch, only when code in the frontend application changes.
-Is able to be run on-demand (i.e. manually without needing to push code)
-Runs the same lint/test jobs as the Continuous Integration workflow
-Runs a build job only when the lint and test jobs pass
-The built docker image should be tagged with the git sha
-Runs a deploy job that applies the Kubernetes manifests to the provided cluster.
-The manifest should deploy the newly created tagged image
-The tag applied to the image should be the git SHA of the commit that triggered the build
-⚠️ NOTE Once you begin work on Continuous Deployment, you'll need to first setup the AWS and Kubernetes environment. Follow the instructions below instructions only when you're ready to start testing your deployments.
+In the `starter` folder, you'll find 2 folders, one named `frontend` and one named `backend`, where each application's source code is maintained. Your job is to use the team's [existing documentation](./starter/frontend/frontend-development-notes) and create CI/CD pipelines to meet the teams' needs.
 
-Setting up Continuous Deployment environment
+## Deliverables
+
+### Frontend
+
+1. A Continuous Integration workflow that:
+   1. Runs on `pull_requests` against the `main` branch,only when code in the frontend application changes.
+   2. Is able to be run on-demand (i.e. manually without needing to push code)
+   3. Runs the following jobs in parallel:
+      1. Runs a linting job that fails if the code doesn't adhere to eslint rules
+      2. Runs a test job that fails if the test suite doesn't pass
+   4. Runs a build job only if the lint and test jobs pass and successfully builds the application
+2. A Continuous Deployment workflow that:
+   1. Runs on `push` against the `main` branch, only when code in the frontend application changes.
+   2. Is able to be run on-demand (i.e. manually without needing to push code)
+   3. Runs the same lint/test jobs as the Continuous Integration workflow
+   4. Runs a build job only when the lint and test jobs pass
+      1. The built docker image should be tagged with the git sha
+   5. Runs a deploy job that applies the Kubernetes manifests to the provided cluster.
+      1. The manifest should deploy the newly created tagged image
+      2. The tag applied to the image should be the git SHA of the commit that triggered the build
+
+### Backend
+
+1. A Continuous Integration workflow that:
+   1. Runs on `pull_requests` against the `main` branch,only when code in the frontend application changes.
+   2. Is able to be run on-demand (i.e. manually without needing to push code)
+   3. Runs the following jobs in parallel:
+      1. Runs a linting job that fails if the code doesn't adhere to eslint rules
+      2. Runs a test job that fails if the test suite doesn't pass
+   4. Runs a build job only if the lint and test jobs pass and successfully builds the application
+2. A Continuous Deployment workflow that:
+   1. Runs on `push` against the `main` branch, only when code in the frontend application changes.
+   2. Is able to be run on-demand (i.e. manually without needing to push code)
+   3. Runs the same lint/test jobs as the Continuous Integration workflow
+   4. Runs a build job only when the lint and test jobs pass
+      1. The built docker image should be tagged with the git sha
+   5. Runs a deploy job that applies the Kubernetes manifests to the provided cluster.
+      1. The manifest should deploy the newly created tagged image
+      2. The tag applied to the image should be the git SHA of the commit that triggered the build
+
+**⚠️ NOTE**
+Once you begin work on Continuous Deployment, you'll need to first setup the AWS and Kubernetes environment. Follow the [instructions below](#setting-up-continuous-deployment-environment)  instructions only when you're ready to start testing your deployments.
+
+## Setting up Continuous Deployment environment
+
 Only complete these steps once you've finished your Continuous Integration pipelines for the frontend and backend applications. This section is meant to create a Kubernetes environment for you to deploy the applications to and verify the deployment step.
 
-First we need to prep the AWS account with the necessary infrastructure for deploying the frontend and backend applications. As the focus of this course is building the CI/CD pipelines, we won't be requiring you to setup all of the underlying AWS and Kubernetes infrastructure. This will be done for you with the provided Terraform and helper scripts. As there are costs associated with running this infrastucture, REMEMBER to destroy everything before stopping work. Everything can be recreated, and the pipeline work you'll be doing is all saved in this repository.
+First we need to prep the AWS account with the necessary infrastructure for deploying the frontend and backend applications. As the focus of this course is building the CI/CD pipelines, we won't be requiring you to setup all of the underlying AWS and Kubernetes infrastructure. This will be done for you with the provided Terraform and helper scripts. As there are costs associated with running this infrastucture, **REMEMBER** to destroy everything before stopping work. Everything can be recreated, and the pipeline work you'll be doing is all saved in this repository.
 
-Create AWS infrastructure with Terraform
-Export your AWS credentials from the Cloud Gateway
-Use the commands below to run the Terraform and type yes after reviewing the expected changes
+### Create AWS infrastructure with Terraform
+
+1. Export your AWS credentials from the Cloud Gateway
+2. Use the commands below to run the Terraform and type `yes` after reviewing the expected changes
+
+```bash
 cd setup/terraform
 terraform apply
-Take note of the Terraform outputs. You'll need these later as you work on the project. You can always retrieve these values later with this command
+```
+
+4. Take note of the Terraform outputs. You'll need these later as you work on the project. You can always retrieve these values later with this command
+
+```bash
 cd setup/terraform
 terraform output
-Generate AWS access keys for Github Actions
-Once everything is created, you'll need to generate AWS credentials for the IAM user account that Github Actions will use in order to interact with your AWS account.
-Launch the Cloud Gateway and go to the IAM service.
-Under users, you should only see the github-action-user user account
-Click the account and go to Security Credentials
-Under Access keys select Create access key
-Select Application running outside AWS and click Next, then Create access key to finish creating the keys
-On the last page, make sure to copy/paste these keys for storing in Github Secrets image
-Add Github Action user to Kubernetes
-Now that the cluster and all AWS resources have been created, you'll need to add the github-action-user IAM user ARN to the Kubernetes configuration that will allow that user to execute kubectl commands against the cluster.
+```
 
-Run the init.sh helper script in the setup folder
+### Generate AWS access keys for Github Actions
+
+1. Once everything is created, you'll need to generate AWS credentials for the IAM user account that Github Actions will use in order to interact with your AWS account.
+2. Launch the Cloud Gateway and go to the IAM service.
+3. Under users, you should only see the `github-action-user` user account
+4. Click the account and go to `Security Credentials`
+5. Under `Access keys`  select `Create access key`
+6. Select `Application running outside AWS` and click `Next`, then `Create access key` to finish creating the keys
+7. On the last page, make sure to copy/paste these keys for storing in Github Secrets
+![image](https://user-images.githubusercontent.com/57732284/221991526-ec4af661-b200-48cd-9087-6f1b3b9820b3.png)
+
+### Add Github Action user to Kubernetes
+
+Now that the cluster and all AWS resources have been created, you'll need to add the `github-action-user` IAM user ARN to the Kubernetes configuration that will allow that user to execute `kubectl` commands against the cluster.
+
+1. Run the `init.sh` helper script in the `setup` folder
+
+```bash
 cd setup
 ./init.sh
-The script will download a tool, add the IAM user ARN to the authentication configuration, indicate a Done status, then it'll remove the tool
-Dependencies
+```
+
+2. The script will download a tool, add the IAM user ARN to the authentication configuration, indicate a `Done` status, then it'll remove the tool
+
+## Dependencies
+
 We've provided the below list of dependencies to assist in the case you'd like to run any of the work locally. Local development issues, however, are not supported as we cannot control the environment as we can in the online workspace.
 
 All of the tools below will be available in the workspace
 
-docker - Used to build the frontend and backend applications
-kubectl - Used to apply the kubernetes manifests
-pipenv - Used for mananging Python version and dependencies
-nvm - Used for managing NodeJS versions
-tfswitch Used for managing Terraform versions
-kustomize Used for building the Kubernetes manifests dynamically in the CI environment
-jq for parsing JSON more easily on the command line
-Frontend Development notes
-Running tests
+* [docker](https://docs.docker.com/desktop/install/debian/) - Used to build the frontend and backend applications
+* [kubectl](https://kubernetes.io/docs/tasks/tools/) - Used to apply the kubernetes manifests
+* [pipenv](https://pipenv.pypa.io/en/latest/install/#pragmatic-installation-of-pipenv) - Used for mananging Python version and dependencies
+* [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) - Used for managing NodeJS versions
+* [tfswitch](https://tfswitch.warrensbox.com/Install/) Used for managing Terraform versions
+* [kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/) Used for building the Kubernetes manifests dynamically in the CI environment
+* [jq](https://stedolan.github.io/jq/download/) for parsing JSON more easily on the command line
+
+## Frontend Development notes
+
+### Running tests
+
 While in the frontend directory, perform the following steps:
 
+```bash
 # Use correct NodeJS version
 nvm use
 
@@ -110,11 +142,17 @@ Tests:       3 passed, 3 total
 Snapshots:   0 total
 Time:        1.33 s
 Ran all test suites.
+```
+
 To simulate a failure in the test coverage, which will be needed to ensure your CI/CD pipeline fails on bad tests, set the MOVIE_HEADING variable before the command like so:
 
+```bash
 FAIL_TEST=true CI=true npm test
+```
+
 As the test is expecting the heading to contain a certain value, we can simulate a failure by changing it with an inline or environment variable. If you use the environment variable, make sure to unset it when you're done testing
 
+```bash
 # Expect tests to fail with this set to anything except Movie List
 export FAIL_TEST=true
 CI=true npm test
@@ -122,6 +160,9 @@ CI=true npm test
 # Expect tests to be passing again
 unset MOVIE_HEADING
 CI=true npm test
+```
+
+```bash
 # Expected failure output
 FAIL src/components/__tests__/App.test.js
   ● renders Movie List heading
@@ -155,16 +196,23 @@ FAIL src/components/__tests__/App.test.js
       at Object.<anonymous> (src/components/__tests__/App.test.js:10:30)
 
 PASS src/components/__tests__/MovieList.test.js
-Running linter
+```
+
+### Running linter
+
 When there are no linting errors, the output won't return any errors
 
+```bash
 npm run lint
 
 # Expected output
 > frontend@1.0.0 lint
 > eslint .
+```
+
 To simulate linting errors, you can run the linting command like so:
 
+```bash
 FAIL_LINT=true npm run lint
 
 # Expected output
@@ -177,9 +225,13 @@ FAIL_LINT=true npm run lint
   7:70  error  'movie.id' is missing in props validation  react/prop-types
 
 ✖ 2 problems (2 errors, 0 warnings)
-Build and run
+```
+
+### Build and run
+
 For local development without docker, the developers use the following commands:
 
+```bash
 cd starter/frontend
 
 # Install dependencies
@@ -187,8 +239,11 @@ npm ci
 
 # Run local development server with hot reloading and point to the backend default
 REACT_APP_MOVIE_API_URL=http://localhost:5000 npm start
+```
+
 To build the frontend application for a production deployment, they use the following commands:
 
+```bash
 # Build the image
 # NOTE: Make sure the image is built with the URL of the backend system.
 # The URL below would be the default backend URL when running locally
@@ -198,9 +253,13 @@ docker run --name mp-frontend -p 3000:3000 -d mp-frontend]
 
 # Open the browser to localhost:3000 and you should see the list of movies,
 # provided the backend is already running and available on localhost:5000
-Deploy Kubernetes manifests
-In order to build the Kubernetes manifests correctly, the team uses kustomize in the following way:
+```
 
+### Deploy Kubernetes manifests
+
+In order to build the Kubernetes manifests correctly, the team uses `kustomize` in the following way:
+
+```bash
 cd starter/frontend/k8s
 # Make sure you're kubeconfig is configured for the EKS cluster, i.e.
 # aws eks update-kubeconfig
@@ -211,10 +270,15 @@ kustomize edit set image frontend=<ECR_REPO_URL>:<NEW_TAG_HERE>
 
 # Apply the manifests to the cluster
 kustomize build | kubectl apply -f -
-Backend Development notes
-Running tests
+```
+
+## Backend Development notes
+
+### Running tests
+
 While in the backend directory, perform the following steps:
 
+```bash
 # Install dependencies
 pipenv install
 
@@ -231,8 +295,11 @@ collected 3 items
 test_app.py::test_movies_endpoint_returns_200 PASSED                                                                                              [ 33%]
 test_app.py::test_movies_endpoint_returns_json PASSED                                                                                             [ 66%]
 test_app.py::test_movies_endpoint_returns_valid_data PASSED                                                                                       [100%]
+```
+
 To simulate failing the backend tests, run the following command:
 
+```bash
 FAIL_TEST=true pipenv run test
 
 # Expected output
@@ -261,13 +328,20 @@ test_app.py:9: AssertionError
 ================================================================== short test summary info ==================================================================
 FAILED test_app.py::test_movies_endpoint_returns_200 - AssertionError: assert 200 == 'true'
 ================================================================ 1 failed, 2 passed in 0.11s ================================================================
-Running linter
+```
+
+### Running linter
+
 When there are no linting errors, there won't be any output.
 
+```bash
 pipenv run lint
 # No output
+```
+
 To simulate linting errors, you can run the linting command below. The command overrides our lint configuration and will error if any lines are over 88 characters.
 
+```bash
 pipenv run lint-fail
 
 # Expected output
@@ -276,9 +350,13 @@ pipenv run lint-fail
 ./movies/movies_api.py:7:89: E501 line too long (120 > 88 characters)
 ./movies/movies_api.py:9:89: E501 line too long (101 > 88 characters)
 ./movies/resources.py:16:89: E501 line too long (117 > 88 characters)
-Build and run
+```
+
+### Build and run
+
 For local development without docker, the developers use the following commands to build and run the backend application:
 
+```bash
 cd starter/backend
 
 # Install dependencies
@@ -286,8 +364,11 @@ pipenv install
 
 # Run application
 pipenv run serve
+```
+
 For production deployments, the team uses the following commands to build and run the Docker image.
 
+```bash
 cd starter/backend
 
 # Build the image
@@ -307,9 +388,13 @@ docker logs -f mp-backend
 
 # Stop the application
 docker stop
-Deploy Kubernetes manifests
-In order to build the Kubernetes manifests correctly, the team uses kustomize in the following way:
+```
 
+### Deploy Kubernetes manifests
+
+In order to build the Kubernetes manifests correctly, the team uses `kustomize` in the following way:
+
+```bash
 cd starter/backend/k8s
 # Make sure you're kubeconfig is configured for the EKS cluster, i.e.
 # aws eks update-kubeconfig
@@ -320,9 +405,11 @@ kustomize edit set image backend=<ECR_REPO_URL>:<NEW_TAG_HERE>
 
 # Apply the manifests to the cluster
 kustomize build | kubectl apply -f -
-License
-License
+```
 
-udacity-build-cicd-project
-udacity-build-cicd-project
-udacity-build-cicd-project
+## License
+
+[License](LICENSE.md)
+# udacity-build-cicd-project
+# udacity-build-cicd-project
+# udacity-build-cicd-project
